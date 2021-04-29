@@ -115,7 +115,7 @@ func (r *Table) Limit(offset int, limit int) {
 	r.limit = limit
 }
 
-func (r *Table) getQuery() string {
+func (r *Table) GetQuery() string {
 	join := ""
 	fieldsJoin := ""
 	if len(r.joins) != 0 {

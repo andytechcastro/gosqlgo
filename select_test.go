@@ -6,8 +6,8 @@ func TestNormalSelect(t *testing.T) {
 	want := "SELECT name, lastname FROM users"
 	users := AddTable("users")
 	users.Columns([]string{"name", "lastname"})
-	if got := users.getQuery(); got != want {
-		t.Errorf("getQuery() = %q, want %q", got, want)
+	if got := users.GetQuery(); got != want {
+		t.Errorf("GetQuery() = %q, want %q", got, want)
 	}
 }
 
@@ -16,8 +16,8 @@ func TestWhereSelect(t *testing.T) {
 	users := AddTable("users")
 	users.Columns([]string{"name", "lastname"})
 	users.Where(map[string]string{"idUser": "1", "name": "Andres"})
-	if got := users.getQuery(); got != want {
-		t.Errorf("getQuery() = %q, want %q", got, want)
+	if got := users.GetQuery(); got != want {
+		t.Errorf("GetQuery() = %q, want %q", got, want)
 	}
 }
 
@@ -25,8 +25,8 @@ func TestOrder(t *testing.T) {
 	want := "SELECT * FROM users ORDER BY firstname, lastname"
 	users := AddTable("users")
 	users.Order([]string{"firstname", "lastname"})
-	if got := users.getQuery(); got != want {
-		t.Errorf("getQuery() = %q, want %q", got, want)
+	if got := users.GetQuery(); got != want {
+		t.Errorf("GetQuery() = %q, want %q", got, want)
 	}
 }
 
@@ -34,8 +34,8 @@ func TestGroup(t *testing.T) {
 	want := "SELECT * FROM users GROUP BY firstname"
 	users := AddTable("users")
 	users.Group([]string{"firstname"})
-	if got := users.getQuery(); got != want {
-		t.Errorf("getQuery() = %q, want %q", got, want)
+	if got := users.GetQuery(); got != want {
+		t.Errorf("GetQuery() = %q, want %q", got, want)
 	}
 }
 
@@ -43,7 +43,7 @@ func TestFetchAll(t *testing.T) {
 	want := "SELECT * FROM users"
 	users := AddTable("users")
 	if got := users.Select(); got != want {
-		t.Errorf("getQuery() = %q, want %q", got, want)
+		t.Errorf("GetQuery() = %q, want %q", got, want)
 	}
 }
 
@@ -51,8 +51,8 @@ func TestJoin(t *testing.T) {
 	want := "SELECT habitaciones, baños FROM users INNER JOIN casa ON users.idCasa = casa.idCasa"
 	users := AddTable("users")
 	users.Join("casa", "users.idCasa = casa.idCasa", []string{"habitaciones", "baños"}, users.InnerJoin())
-	if got := users.getQuery(); got != want {
-		t.Errorf("getQuery() = %q, want %q", got, want)
+	if got := users.GetQuery(); got != want {
+		t.Errorf("GetQuery() = %q, want %q", got, want)
 	}
 }
 
@@ -61,8 +61,8 @@ func TestMultiJoin(t *testing.T) {
 	users := AddTable("users")
 	users.Join("casa", "users.idCasa = casa.idCasa", nil, users.LeftJoin())
 	users.Join("oficina", "users.idOficina = oficina.idOficina", nil, users.RightJoin())
-	if got := users.getQuery(); got != want {
-		t.Errorf("getQuery() = %q, want %q", got, want)
+	if got := users.GetQuery(); got != want {
+		t.Errorf("GetQuery() = %q, want %q", got, want)
 	}
 }
 
