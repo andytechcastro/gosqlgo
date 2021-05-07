@@ -9,6 +9,8 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 func execQuery(query string) *sql.Rows {
