@@ -2,10 +2,16 @@ package gosqlgo
 
 import "testing"
 
+type User struct {
+	Name     string `db:"name"`
+	Lastname string `db:"lastname"`
+}
+
 func TestNormalSelect(t *testing.T) {
 	want := "SELECT name, lastname FROM users"
 	users := AddTable("users")
-	users.Columns([]string{"name", "lastname"})
+	var persona User
+	users.Columns(persona)
 	if got := users.GetQuery(); got != want {
 		t.Errorf("GetQuery() = %q, want %q", got, want)
 	}
@@ -14,7 +20,8 @@ func TestNormalSelect(t *testing.T) {
 func TestWhereSelect(t *testing.T) {
 	want := "SELECT name, lastname FROM users WHERE idUser = '1' AND name = 'Andres'"
 	users := AddTable("users")
-	users.Columns([]string{"name", "lastname"})
+	var persona User
+	users.Columns(persona)
 	users.Where(map[string]string{"idUser": "1", "name": "Andres"})
 	if got := users.GetQuery(); got != want {
 		t.Errorf("GetQuery() = %q, want %q", got, want)
