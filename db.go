@@ -14,10 +14,6 @@ import (
 )
 
 func execQuery(query string) *sql.Rows {
-	os.Setenv("USER_DATABASE", "test")
-	os.Setenv("PASS_DATABASE", "12345678")
-	os.Setenv("HOST_DATABASE", "localhost")
-	os.Setenv("NAME_DATABASE", "test")
 	usuario := os.Getenv("USER_DATABASE")
 	password := os.Getenv("PASS_DATABASE")
 	host := os.Getenv("HOST_DATABASE")
