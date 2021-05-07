@@ -1,6 +1,10 @@
 package gosqlgo
 
-import "strings"
+import (
+	"database/sql"
+	"reflect"
+	"strings"
+)
 
 type Table struct {
 	table  string
@@ -90,8 +94,8 @@ func (r *Table) Delete(conditions map[string]string) string {
 	return delete
 }
 
-func (r *Table) Columns(fields []string) {
-	r.fields = fields
+func (r *Table) Columns(fields interface{}) {
+	r.fields = getDBHeaders(fields)
 }
 
 func (r *Table) Expression(field string) {
@@ -171,4 +175,30 @@ func (r *Table) GetQuery() string {
 func (r *Table) Join(table string, on string, fields []string, typeJoin int) {
 	join := joinTable{table: table, on: on, fields: fields, typeJoin: typeJoin}
 	r.joins[table] = join
+}
+
+func (r *Table) Query() *sql.Rows {
+	query := r.GetQuery()
+	return execQuery(query)
+}
+
+func getDBHeaders(item interface{}) []string {
+	var res []string
+	if item == nil {
+		return res
+	}
+	v := reflect.TypeOf(item)
+	reflectValue := reflect.ValueOf(item)
+	reflectValue = reflect.Indirect(reflectValue)
+
+	if v.Kind() == reflect.Ptr {
+		v = v.Elem()
+	}
+	for i := 0; i < v.NumField(); i++ {
+		tag := v.Field(i).Tag.Get("db")
+		if tag != "" && tag != "-" {
+			res = append(res, tag)
+		}
+	}
+	return res
 }
