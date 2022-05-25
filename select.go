@@ -1,20 +1,20 @@
-package gosqlgo
+package main
 
 import (
-	"database/sql"
 	"reflect"
 	"strings"
 )
 
 type Table struct {
-	table  string
-	fields []string
-	where  map[string]string
-	order  []string
-	joins  map[string]joinTable
-	group  []string
-	offset int
-	limit  int
+	table    string
+	fields   []string
+	where    map[string]string
+	order    []string
+	joins    map[string]joinTable
+	group    []string
+	offset   int
+	limit    int
+	rawField interface{}
 }
 
 type joinTable struct {
@@ -96,6 +96,7 @@ func (r *Table) Delete(conditions map[string]string) string {
 
 func (r *Table) Columns(fields interface{}) {
 	r.fields = getDBHeaders(fields)
+	r.rawField = fields
 }
 
 func (r *Table) Expression(field string) {
@@ -177,9 +178,9 @@ func (r *Table) Join(table string, on string, fields []string, typeJoin int) {
 	r.joins[table] = join
 }
 
-func (r *Table) Query() *sql.Rows {
+func (r *Table) Query() string {
 	query := r.GetQuery()
-	return execQuery(query)
+	return query
 }
 
 func getDBHeaders(item interface{}) []string {

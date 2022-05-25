@@ -1,4 +1,4 @@
-package gosqlgo
+package main
 
 import "testing"
 
