@@ -196,7 +196,7 @@ func getDBHeaders(item interface{}) []string {
 		v = v.Elem()
 	}
 	for i := 0; i < v.NumField(); i++ {
-		tag := v.Field(i).Tag.Get("db")
+		tag := v.Field(i).Tag.Get("query")
 		if tag != "" && tag != "-" {
 			res = append(res, tag)
 		}
